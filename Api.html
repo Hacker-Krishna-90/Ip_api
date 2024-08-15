@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP API Service</title>
+</head>
+<body>
+    <pre id="response" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;"></pre>
+    <script>
+        // Function to extract IP from URL parameters
+        function getIPFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('ip') || '8.8.8.8'; // Default IP if none is provided
+        }
+
+        // Function to format the response
+        function formatResponse(data) {
+            return `
+❤ Free IP Services ❤
+==========================
+🗾 Ip Valid: ${data.status === "success" ? "✅" : "❌"}
+🌎 Country: ${data.country}
+💠 Country Code: ${data.countryCode}
+🥬 Region: ${data.region}
+🗺️ Region Name: ${data.regionName}
+🏠 City: ${data.city}
+✉️ Zip: ${data.zip}
+🦠 Latitude: ${data.lat}
+⭐ Longitude: ${data.lon}
+🕢 Timezone: ${data.timezone}
+🗼 ISP: ${data.isp}
+🔥 Organization: ${data.org}
+🌾 AS: ${data.as}
+🛰 IP: ${data.query}
+==========================
+🔥 Powered By @cutehack99yt
+            `;
+        }
+
+        // Function to fetch IP details
+        function fetchIPDetails(ip) {
+            fetch(`http://ip-api.com/json/${ip}`)
+                .then(response => response.json())
+                .then(data => {
+                    const responseElement = document.getElementById('response');
+                    if (data.status === "success") {
+                        responseElement.textContent = formatResponse(data);
+                    } else {
+                        responseElement.textContent = "❌ Failed to fetch IP details.";
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('response').textContent = "❌ Error fetching IP details: " + error.message;
+                });
+        }
+
+        // Initialize the page
+        function init() {
+            const ip = getIPFromURL();
+            fetchIPDetails(ip);
+        }
+
+        // Run the script after loading
+        window.onload = init;
+    </script>
+</body>
+  </html>
